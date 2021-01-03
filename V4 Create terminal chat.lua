@@ -50,19 +50,12 @@ function Checks()
 		return false
 	end
 	local AuthInfo = StriToArray(ws.readAll())
-	print("Auth : Check")
-	local file = fs.open("CheckLog.txt","w")
-	file.write("-=-=- Client -=-=-\n"	..textutils.serialise(ClientInfo))
-	file.write("\n-=-=- Gateway -=-=-\n"	..textutils.serialise(GatewayInfo))
-	file.write("\n-=-=- Auth -=-=-\n"		..textutils.serialise(AuthInfo))
-	file.close()
-	print("Checking done : Details in CheckLog.txt")
+	print("Auth checking done")
 	return true
 end
 
 function WaitForCreds()
 	local myTimer = os.startTimer(10)
-	local ToFile = ""
 	local BTF = true
 	local GTF = true
 	
@@ -72,7 +65,6 @@ function WaitForCreds()
 		if (_ == "websocket_message") then
 			if (response:sub(1, 1) == "{") then
 				local Tab = StriToArray(response)
-				ToFile = ToFile.."\n"..(textutils.serialise(Tab))
 				if (Tab.t == "READY") then
 					print("Recived Bot Info")
 					BotTab = Tab.d
@@ -84,8 +76,6 @@ function WaitForCreds()
 				end
 				
 				UpdateSeq(Tab.s)
-			else
-				ToFile = ToFile.."\n"..(textutils.serialise(response))
 			end
 		end
 	end
