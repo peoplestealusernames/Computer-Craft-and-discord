@@ -114,21 +114,17 @@ function SendHeartBeat()
 	print("HeartBeat")
 end
 
-function TestFNC(FNCS,Run) --Keep run empty unless you for sure do not want return added
-	local FNC,err = load(FNCS)
+function TestFNC(FNCS) 
+	local FNC,err = load("return "..FNCS)
+	if not (FNC) then
+		FNC,err = load(FNCS)
+	end
+	
 	if not(FNC == nil) then
 		local work, err = pcall(FNC)
-		if work then
-			return err --Return value (may be nil)
-		else
-			return err --Function execution err
-		end
+		return err --Return value (may be nil) or error
 	else
-		if (not Run) then
-			return TestFNC("return "..FNCS,true)
-		else
-			return err --compile error (not valid function)
-		end
+		return err --compile error (not valid function)
 	end
 end
 
